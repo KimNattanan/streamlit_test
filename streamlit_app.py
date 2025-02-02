@@ -122,20 +122,16 @@ def load_file(name):
     file.name = name  # Set a filename
     return file
 
-file_ex1 = load_file("example1_CN_3d.npy")
-file_ex2 = load_file("example2_MCI_3d.npy")
-file_ex3 = load_file("example3_AD_3d.npy")
-
 
 uploaded_file = st.file_uploader("Select an image...", type="npy")
 
 c1,c2,c3 = st.columns([1,1,1])
 with c1:
-    if st.button("Example 1 (CN)"): uploaded_file = file_ex1
+    if st.button("Example 1 (CN)"): uploaded_file = load_file("example1_CN_3d.npy")
 with c2:
-    if st.button("Example 2 (MCI)"): uploaded_file = file_ex2
+    if st.button("Example 2 (MCI)"): uploaded_file = load_file("example2_MCI_3d.npy")
 with c3:
-    if st.button("Example 3 (AD)"): uploaded_file = file_ex3
+    if st.button("Example 3 (AD)"): uploaded_file = load_file("example3_AD_3d.npy")
 
 if uploaded_file is not None:
 
