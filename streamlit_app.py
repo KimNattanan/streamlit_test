@@ -3,6 +3,7 @@ from PIL import Image
 import numpy as np
 import plotly.graph_objects as go
 from skimage import transform
+import io
 
 st.set_page_config(layout="wide")
 
@@ -30,6 +31,22 @@ st.markdown(
         background-color: #ffffff;  /* White */
         color: #1a1a2e;  /* Dark navy blue text */
         font-family: Verdana, sans-serif;
+    }
+    .stButton button {
+        background-color: rgb(81, 82, 108);
+        color: rgb(255,255,255);
+        width: 60%;
+        margin-left: 20%;
+        margin-right: 20%;
+        border: 0;
+        transition: 200ms;
+    }
+    .stButton button:hover, .stButton button:active {
+        color: rgb(255,255,255);
+        scale: 1.1;
+    }
+    .stButton button:link {
+        color: rgb(0,0,0);
     }
     /* Prediction text style */
     .stMarkdown p {
@@ -94,7 +111,31 @@ st.title('PETAI')
 st.write("An AI-powered Alzheimer's disease detection web-based tool, based on FDG PET brain scans")
 st.markdown('<p style="color: #ffffff; font-family: Verdana, sans-serif;">(Upload an FDG PET brain scan)</p>', unsafe_allow_html=True)
 
+# uploaded_file = st.file_uploader("Select an image...", type="npy")
+
+
+
+def load_file(name):
+    with open("./"+name, "rb") as f:
+        file_content = f.read()
+    file = io.BytesIO(file_content)
+    file.name = name  # Set a filename
+    return file
+
+file_ex1 = load_file("example1_CN_3d.npy")
+file_ex2 = load_file("example2_MCI_3d.npy")
+file_ex3 = load_file("example3_AD_3d.npy")
+
+
 uploaded_file = st.file_uploader("Select an image...", type="npy")
+
+c1,c2,c3 = st.columns([1,1,1])
+with c1:
+    if st.button("Example 1 (CN)"): uploaded_file = file_ex1
+with c2:
+    if st.button("Example 2 (MCI)"): uploaded_file = file_ex2
+with c3:
+    if st.button("Example 3 (AD)"): uploaded_file = file_ex3
 
 if uploaded_file is not None:
 
@@ -136,13 +177,13 @@ if uploaded_file is not None:
     col1, spacer, col2 = st.columns([6,1,6])
 
     with col1:
-            st.header("3D Illustration of an Uploaded Brain Scan File")
-            st.plotly_chart(fig, use_container_width=True)
+        st.header("3D Illustration of an Uploaded Brain Scan File")
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-            st.header("Prediction")
-            st.write("with highlighted important brain features")
-            st.image(hm, width=450)
+        st.header("Prediction")
+        st.write("with highlighted important brain features")
+        st.image(hm, width=450)
 
     st.write("")
 
